@@ -1,0 +1,16 @@
+.env
+.env.local
+.env.*.local
+
+credentials.json
+secrets.json
+*.key
+*.pem
+
+.DS_Store
+Thumbs.db
+
+.vscode/
+.idea/
+node_modules/
+*.log
