@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMARTINTERN | Cold Mail Faster</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #0f172a, #111827, #1e3a8a);
+            overflow: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            width: 450px;
+            height: 450px;
+            background: #2563eb;
+            filter: blur(180px);
+            top: -120px;
+            left: -120px;
+            opacity: 0.35;
+        }
+
+        body::after {
+            content: '';
+            position: absolute;
+            width: 350px;
+            height: 350px;
+            background: #7c3aed;
+            filter: blur(180px);
+            bottom: -100px;
+            right: -100px;
+            opacity: 0.35;
+        }
+
+        .card {
+            position: relative;
+            z-index: 1;
+            width: min(450px, 90%);
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.35);
+            color: white;
+        }
+
+        .logo {
+            font-size: 34px;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .tag {
+            text-align: center;
+            margin: 8px 0 30px;
+            color: #cbd5e1;
+        }
+
+        .input-box {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            outline: none;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.12);
+            color: white;
+            font-size: 15px;
+        }
+
+        input:focus {
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.6);
+        }
+
+        input::placeholder {
+            color: #d1d5db;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            background: #2563eb;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+
+        button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        #status {
+            margin-top: 20px;
+            text-align: center;
+            font-weight: 600;
+            min-height: 24px;
+        }
+
+        @media (max-width: 500px) {
+            .card {
+                padding: 30px 25px;
+            }
+
+            .logo {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <div class="logo">SMARTINTERN</div>
+        <div class="tag">Cold Mail Faster 🚀</div>
+
+        <form id="leadForm">
+            <div class="input-box">
+                <label for="name">Professor / HR Name</label>
+                <input type="text" id="name" placeholder="Dr. John Smith" required>
+            </div>
+
+            <div class="input-box">
+                <label for="company">Company / University</label>
+                <input type="text" id="company" placeholder="Google / IIT Delhi" required>
+            </div>
+
+            <div class="input-box">
+                <label for="email">Official Email</label>
+                <input type="email" id="email" placeholder="hr@company.com" required>
+            </div>
+
+            <button type="submit" id="submitButton">Save Lead</button>
+        </form>
+
+        <div id="status"></div>
+    </div>
+
+    <script>
+        // Replace this with your own Google Apps Script Web App /exec URL.
+        const scriptURL = "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL";
+
+        const form = document.getElementById("leadForm");
+        const status = document.getElementById("status");
+        const submitButton = document.getElementById("submitButton");
+
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            status.style.color = "white";
+            status.textContent = "Saving...";
+            submitButton.disabled = true;
+
+            const data = {
+                name: document.getElementById("name").value.trim(),
+                company: document.getElementById("company").value.trim(),
+                email: document.getElementById("email").value.trim()
+            };
+
+            try {
+                await fetch(scriptURL, {
+                    method: "POST",
+                    mode: "no-cors",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                status.style.color = "#22c55e";
+                status.textContent = "✅ Lead Saved Successfully";
+                form.reset();
+            } catch (error) {
+                console.error("Error:", error);
+                status.style.color = "#ef4444";
+                status.textContent = "❌ Failed to save lead";
+            } finally {
+                submitButton.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
